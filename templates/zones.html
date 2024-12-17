@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm Tech System - Zones</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark-blue: #558e92;
+      --gradient-start: #4facfe;
+      --gradient-mid: #00c6ff;
+      --gradient-end: #b7dca8;
+      --text-color: #b7dca8;
+      --hover-bg: white;
+      --hover-color: black;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      color: var(--text-color);
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      background: linear-gradient(to right, #558e92, #b7dc8a);
+      text-align: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 2.5rem;
+      margin-top: 20px;
+      animation: slideDown 1s ease-out;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar {
+      margin-top: 20px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .nav-links li {
+      margin: 0 15px;
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li:hover a {
+      background: var(--hover-bg);
+      color: var(--hover-color);
+      padding: 5px 10px;
+      border-radius: 25px;
+    }
+
+    #map {
+      height: 500px;
+      width: 90%;
+      margin: 20px auto;
+      border: 2px solid var(--text-color);
+      border-radius: 10px;
+    }
+
+    #soil-data {
+      margin: 20px auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AgriGo - Zones</h1>
+    <!-- Navigation menu -->
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="{{ url_for('sensors') }}"><i class="fas fa-sensors"></i> Sensors</a></li>
+        <li><a href="{{ url_for('activity_log') }}"><i class="fas fa-envelope"></i> Activity Log</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Zones content -->
+  <section>
+    <div id="map"></div>
+    <div id="soil-data">Fetching soil data...</div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 AgriGo. All rights reserved.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script>
+    // Initialize the map with coordinates from environment
+    const MAP_COORDINATES = [parseFloat("{{ MAP_LAT }}"), parseFloat("{{ MAP_LON }}")];
+    const ZOOM_LEVEL = 16;
+
+    var map = L.map('map').setView(MAP_COORDINATES, ZOOM_LEVEL);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add marker for dynamic location
+    L.marker(MAP_COORDINATES).addTo(map)
+      .bindPopup('Selected Farm Location')
+      .openPopup();
+
+    // Estate boundary (example coordinates, fetched dynamically)
+    var estateBoundary = JSON.parse('{{ ESTATE_BOUNDARY | tojson }}');
+
+    L.polygon(estateBoundary, { color: 'red' }).addTo(map)
+      .bindPopup('Estate Boundary');
+
+    // Fetch soil data dynamically from the backend
+    function fetchSoilData() {
+      const apiKey = "{{ SOIL_API_KEY }}";
+      const polyId = "{{ POLYGON_ID }}";
+      const url = `https://api.agromonitoring.com/agro/1.0/soil?polyid=${polyId}&appid=${apiKey}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const soilInfo = `
+            <b>Temperature (10 cm depth):</b> ${data.t10} K<br>
+            <b>Surface Temperature:</b> ${data.t0} K<br>
+            <b>Moisture:</b> ${data.moisture} m3/m3
+          `;
+          document.getElementById('soil-data').innerHTML = soilInfo;
+        })
+        .catch(error => {
+          console.error('Error fetching soil data:', error);
+          document.getElementById('soil-data').innerHTML = 'Soil data not available';
+        });
+    }
+
+    fetchSoilData();
+  </script>
+</body>
+</html>
