@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>AgriGo - Notifications</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      background: linear-gradient(to right, #4facfe, #539497);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      animation: fadeIn 2s ease-out;
+    }
+
+    .navbar {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li {
+      margin: 0 15px;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      padding: 10px 15px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: #00c6ff;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-top: 50px;
+      font-size: 2.5rem;
+      animation: slideIn 1.5s ease-out;
+    }
+
+    .notification-container {
+      width: 80%;
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 2px 2px 12px #aaa;
+      transition: transform 0.5s ease;
+    }
+
+    .notification-container:hover {
+      transform: scale(1.02);
+    }
+
+    .notification-item {
+      background-color: #ffcccc;
+      border: 1px solid #ff6666;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .notification-item:hover {
+      background-color: #ffb3b3;
+      transform: translateY(-5px);
+    }
+
+    .notification-item p {
+      font-weight: bold;
+      color: #cc0000;
+      transition: color 0.3s ease;
+    }
+
+    .notification-item:hover p {
+      color: #4CAF50;
+    }
+
+    .notification-item .date {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: white;
+      font-size: 1rem;
+      animation: fadeIn 2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nav-links li {
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="sensors"><i class="fas fa-home"></i> Sensors</a></li>
+        <li><a href="zones"><i class="fas fa-map"></i> Zones</a></li>
+        <li><a href="activity-log"><i class="fas fa-tasks"></i> Activity Log</a></li>
+        <li><a href="notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="weather-alerts"><i class="fas fa-cloud-sun"></i> Weather Alerts</a></li>
+        <li><a href="chatbot"><i class="fas fa-comments"></i> Chatbot</a></li> <!-- Chatbot Link -->
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>AgriGo - Notifications</h1>
+
+    <div class="notification-container">
+      <div class="notification-item">
+        <p>Tea Mosquito Bug detected in your field!</p>
+        <p class="date">Date: 2024-12-16</p>
+        <p>Suggested action: Apply neem oil spray to affected areas to prevent infestation.</p>
+      </div>
+
+      <div class="notification-item">
+        <p>Blister Blight Disease detected in Zone 3!</p>
+        <p class="date">Date: 2024-12-16</p>
+        <p>Suggested action: Apply copper-based fungicides to control the spread of the disease.</p>
+      </div>
+
+      <div class="notification-item">
+        <p>Soil moisture is critically low in Zone 1.</p>
+        <p class="date">Date: 2024-12-16</p>
+        <p>Suggested action: Increase irrigation in Zone 1 to maintain optimal soil moisture levels.</p>
+      </div>
+
+      <div class="notification-item">
+        <p>Pest population of Whitefly is increasing in Zone 2!</p>
+        <p class="date">Date: 2024-12-16</p>
+        <p>Suggested action: Consider using organic insecticides to reduce pest impact.</p>
+      </div>
+
+      <div class="notification-item">
+        <p>Heavy rainfall expected in your area within the next 24 hours!</p>
+        <p class="date">Date: 2024-12-16</p>
+        <p>Suggested action: Ensure all drainage systems are clear to prevent waterlogging in the fields.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    &copy; 2024 AgriGo
+  </footer>
+
+</body>
+
+</html>

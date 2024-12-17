@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>AgriGo - Chatbot</title>
+  <style>
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #539497);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 2px 2px 12px #aaa;
+      border-radius: 8px;
+    }
+
+    .header {
+      text-align: center;
+      color: #231557;
+    }
+
+    .chat-box {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(to bottom, #f5f5f5, #e6e6e6);
+    }
+
+    .chat-message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .user-message {
+      background-color: #ff1361;
+      text-align: right;
+      color: white;
+    }
+
+    .bot-message {
+      background-color: #ffffff;
+      text-align: left;
+      color: #231557;
+      border: 1px solid #aaa;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .bot-message strong {
+      font-weight: bold;
+      color: #44107a;
+    }
+
+    .input-container {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ff1361;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d0114e;
+    }
+
+    .back-button {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #44107a;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #331a58;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="header">AgriGo - Chatbot</h1>
+
+    <!-- Chat History Section -->
+    <div class="chat-box">
+      {% if history %}
+        {% for message in history %}
+          <div class="chat-message user-message">
+            <p><strong>You:</strong> {{ message.user }}</p>
+          </div>
+          <div class="chat-message bot-message">
+            <p><strong>Bot:</strong><br>
+              <span class="bot-response">{{ message.bot }}</span>
+            </p>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <!-- User Input Form -->
+    <div class="input-container">
+      <form method="POST" action="/chatbot" style="width: 100%; display: flex;">
+        <input type="text" id="user_question" name="user_question" placeholder="Ask something..." required>
+        <button type="submit">Ask</button>
+      </form>
+    </div>
+
+    <!-- Back Button -->
+    <a href="/" class="back-button"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+
+  <script>
+    // Function to make text bold between ** marks
+    function makeBold() {
+      const botResponses = document.querySelectorAll('.bot-response');
+      botResponses.forEach(response => {
+        // Replace text wrapped in ** with <strong> tags
+        response.innerHTML = response.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      });
+    }
+
+    // Function to break lines for numbered bullets
+    function handleBulletPoints() {
+      const botResponses = document.querySelectorAll('.bot-response');
+      botResponses.forEach(response => {
+        // Break lines for numbers followed by a period (e.g., 1., 2.)
+        response.innerHTML = response.innerHTML.replace(/(\d+\.\s)/g, '<br>$1');
+      });
+    }
+
+    // Call both functions on page load
+    window.onload = function () {
+      makeBold();
+      handleBulletPoints();
+    };
+
+    // Scroll the chat box to the bottom whenever the chat is updated
+    const chatBox = document.querySelector('.chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Clear chat history on window close or tab change
+    window.addEventListener("beforeunload", function () {
+      fetch('/clear-chat-history', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ clear_history: true })
+      });
+    });
+  </script>
+</body>
+
+</html>

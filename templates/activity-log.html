@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>AgriGo - Activity Log</title>
+  <style>
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #4facfe, #539497);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 2.5rem;
+      margin-top: 20px;
+      animation: slideDown 1s ease-out;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li {
+      margin: 0 15px;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      padding: 10px 15px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: #00c6ff;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .activity-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .activity-item {
+      background: linear-gradient(to right, #f9f9f9, #e3fdfd);
+      border: 2px solid transparent;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .activity-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      border-color: #00c6ff;
+    }
+
+    .activity-item i {
+      color: #00c6ff;
+      margin-right: 10px;
+    }
+
+    .activity-item .date {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 5px;
+    }
+
+    .activity-item p {
+      margin: 5px 0;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nav-links li {
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="sensors"><i class="fas fa-home"></i> Sensors</a></li>
+        <li><a href="zones"><i class="fas fa-map"></i> Zones</a></li>
+        <li><a href="activity-log"><i class="fas fa-tasks"></i> Activity Log</a></li>
+        <li><a href="notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="weather-alerts"><i class="fas fa-cloud-sun"></i> Weather Alerts</a></li>
+        <li><a href="chatbot"><i class="fas fa-comments"></i> Chatbot</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>AgriGo - Activity Log</h1>
+
+    <div class="activity-container">
+      <div class="activity-item">
+        <p><i class="fas fa-leaf"></i> Crop Inspection: Vegetables checked for pests.</p>
+        <p class="date">Date: 2024-12-16 10:00 AM</p>
+        <p>Details: No pest damage detected. Crops are healthy and growing well.</p>
+      </div>
+
+      <div class="activity-item">
+        <p><i class="fas fa-cloud-sun"></i> Weather Report: Clear skies with mild temperatures.</p>
+        <p class="date">Date: 2024-12-16 09:00 AM</p>
+        <p>Details: Weather forecast predicts clear skies and mild temperatures with no rain for the next 48 hours.</p>
+      </div>
+
+      <div class="activity-item">
+        <p><i class="fas fa-tint"></i> Irrigation: Irrigation activated in Zone 3.</p>
+        <p class="date">Date: 2024-12-16 08:30 AM</p>
+        <p>Details: Irrigation system activated due to detected low soil moisture levels in Zone 3.</p>
+      </div>
+
+      <div class="activity-item">
+        <p><i class="fas fa-bell"></i> Pest Alert: Aphid infestation detected.</p>
+        <p class="date">Date: 2024-12-15 05:00 PM</p>
+        <p>Details: Immediate action required. Apply organic pesticide to affected zones.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2024 AgriGo
+  </footer>
+</body>
+
+</html>

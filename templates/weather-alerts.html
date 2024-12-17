@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Weather Alerts</title>
+  <style>
+    /* Gradient background */
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #539497);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      scroll-behavior: smooth;
+    }
+
+    /* Container for content */
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 2px 2px 12px #aaa;
+      border-radius: 8px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Header Style */
+    .header {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      animation: slideIn 1s ease-out;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    /* Weather Section */
+    .weather-section {
+      margin-top: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Individual weather info box */
+    .weather-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .weather-info img {
+      height: 80px;
+      width: 80px;
+      transition: transform 0.3s ease;
+    }
+
+    .weather-info:hover {
+      transform: translateY(-5px);
+      box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .weather-info:hover img {
+      transform: scale(1.1);
+    }
+
+    .weather-data {
+      flex: 1;
+      margin-left: 15px;
+    }
+
+    .weather-data h3 {
+      margin: 0 0 10px;
+      color: #555;
+    }
+
+    .weather-data p {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #666;
+    }
+
+    /* Forecast Section */
+    .forecast-section {
+      margin-top: 30px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .forecast-info {
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .forecast-info:hover {
+      transform: translateY(-5px);
+      box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button Style */
+    .back-button {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="header">Weather Alerts</h1>
+    
+    <!-- Current Weather Section -->
+    <div id="currentWeather" class="weather-section">
+      <h2>Current Weather</h2>
+      <div class="weather-info">
+        <img src="http://openweathermap.org/img/wn/{{ current_weather['weather'][0]['icon'] }}@2x.png" alt="{{ current_weather['weather'][0]['description'] }}">
+        <div class="weather-data">
+          <p><strong>Description:</strong> {{ current_weather['weather'][0]['description'] }}</p>
+          <p><strong>Temperature:</strong> {{ current_weather['main']['temp'] }} °C</p>
+          <p><strong>Feels Like:</strong> {{ current_weather['main']['feels_like'] }} °C</p>
+          <p><strong>Humidity:</strong> {{ current_weather['main']['humidity'] }}%</p>
+          <p><strong>Pressure:</strong> {{ current_weather['main']['pressure'] }} hPa</p>
+          <p><strong>Wind Speed:</strong> {{ current_weather['wind']['speed'] }} m/s</p>
+          <p><strong>Wind Direction:</strong> {{ current_weather['wind']['deg'] }}°</p>
+        </div>
+      </div>
+    </div>
+
+      <!-- Forecast Weather Section -->
+      <div id="forecastWeather" class="forecast-section">
+        <h2>Weather Forecast</h2>
+        {% for forecast in forecast_weather['list'] %}
+          <div class="forecast-info">
+            <p><strong>Date and Time:</strong> {{ forecast['dt_txt'] }}</p>
+            <p><strong>Temperature:</strong> {{ forecast['main']['temp'] }} °C</p>
+            <p><strong>Weather:</strong> {{ forecast['weather'][0]['description'] }}</p>
+            <p><strong>Humidity:</strong> {{ forecast['main']['humidity'] }}%</p>
+            <p><strong>Wind Speed:</strong> {{ forecast['wind']['speed'] }} m/s</p>
+            <p><strong>Wind Direction:</strong> {{ forecast['wind']['deg'] }}°</p>
+          </div>
+        {% endfor %}
+      </div>
+  
+      <!-- Back Button -->
+      <a href="/" class="back-button"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </body>
+  </html>
+  

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriGo - Sensors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --dark-green: #4CAF50;
+      --light-green: #97BC62;
+      --brown: #6A4028;
+      --cream: #F2E8CF;
+    }
+
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      background: linear-gradient(to right, #4facfe, #539497);
+      color: var(--brown);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li {
+      margin: 0 15px;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      padding: 10px 15px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: #00c6ff;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .container {
+      max-width: 1200px;
+      margin: 80px auto 0;
+      padding: 2rem;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 2.5rem;
+      margin-top: 20px;
+      animation: slideDown 1s ease-out;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+
+
+    h2,
+    h3 {
+      font-family: 'Merriweather', serif;
+      color: var(--dark-green);
+      transition: color 0.3s ease;
+    }
+
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+      transition: grid-template-columns 0.3s ease;
+    }
+
+    .sensor-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sensor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sensor-icon {
+      font-size: 3rem;
+      color: var(--dark-green);
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .sensor-card:hover .sensor-icon {
+      color: var(--light-green);
+    }
+
+    .sensor-name {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .sensor-data {
+      font-size: 1.2rem;
+      color: var(--brown);
+    }
+
+    .timestamp {
+      text-align: center;
+      margin-top: 2rem;
+      font-style: italic;
+      color: var(--brown);
+    }
+
+    /* Add a smooth scroll effect to the page */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sensor-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation menu -->
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('zones') }}"><i class="fas fa-cogs"></i> Zones</a></li>
+      <li><a href="{{ url_for('activity_log') }}"><i class="fas fa-envelope"></i> Activity Log</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1>AgriGo - Sensors</h1>
+
+    <div class="sensor-grid">
+      <div class="sensor-card">
+        <i class="fas fa-wave-square sensor-icon"></i>
+        <p class="sensor-name">Ultrasonic Transducer</p>
+        <p class="sensor-data">Distance: {{ sensor_data.distance }} cm</p>
+      </div>
+      <div class="sensor-card">
+        <i class="fas fa-bug sensor-icon"></i>
+        <p class="sensor-name">IR Sensor</p>
+        <p class="sensor-data">Pest Swarm: {{ 'Detected' if sensor_data.irValue == 0 else 'Not Detected' }}</p>
+      </div>
+      <div class="sensor-card">
+        <i class="fas fa-thermometer-half sensor-icon"></i>
+        <p class="sensor-name">Environmental Sensor</p>
+        <p class="sensor-data">Temperature: {{ sensor_data.temperature }} &#8451;</p>
+        <p class="sensor-data">Humidity: {{ sensor_data.humidity }}%</p>
+      </div>
+      <div class="sensor-card">
+        <i class="fas fa-running sensor-icon"></i>
+        <p class="sensor-name">PIR Sensor</p>
+        <p class="sensor-data">Motion: {{ 'Detected' if sensor_data.motion == 1 else 'Not Detected' }}</p>
+      </div>
+
+    </div>
+
+    <div class="timestamp">
+      <p>Last updated: {{ sensor_data.timestamp }}</p>
+    </div>
+  </div>
+</body>
+
+</html>
