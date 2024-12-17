@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>AgriGo</title>
+  <style>
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #539497);
+      margin: 0;
+      padding: 0;
+      color: #754d4d;
+    }
+    /* Other CSS styles remain unchanged */
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="sensors"><i class="fas fa-glass"></i> Sensors</a></li>
+        <li><a href="zones"><i class="fas fa-map"></i> Zones</a></li>
+        <li><a href="activity-log"><i class="fas fa-tasks"></i> Activity Log</a></li>
+        <li><a href="notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="weather-alerts"><i class="fas fa-cloud-sun"></i> Weather Alerts</a></li>
+        <li><a href="chatbot"><i class="fas fa-comments"></i> Chatbot</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1 style="text-align: center; color: #3a0000;">AgriGo - AI Powered</h1>
+
+    <div class="container">
+      <div class="column">
+        <h2 style="text-align: center; color: #290310;">Live Weather Updates</h2>
+        <p>Temperature: <span id="temperature">Fetching...</span></p>
+        <p>Humidity: <span id="humidity">Fetching...</span></p>
+        <p>Soil Moisture: <span id="soilMoisture">Fetching...</span></p>
+        <p class="weather-condition" id="weatherCondition">Condition: Fetching...</p>
+      </div>
+
+      <div class="column ai-recommendation">
+        <h2 style="text-align: center; color: #290310;">AI Recommendations</h2>
+        <p style="text-align: center; color: #754d4d;"><strong>Farming Advice:</strong></p>
+        <form id="farmingAdviceForm">
+          <label for="crop">Enter Your Crop Name:</label>
+          <input type="text" id="crop" placeholder="e.g., Wheat" required>
+          <button type="submit">Get Suggestion</button>
+        </form>
+        <div id="ai-response">AI Response will appear here...</div>
+      </div>
+    </div>
+
+    <div class="attention">
+      <p class="alert-normal">Attention! Weather condition is: <span id="liveWeather">Normal...</span></p>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2024 AgriGo. All rights reserved.
+  </footer>
+
+  <script>
+    const API_KEY = "{{ api_key }}";
+    const POLY_ID = "{{ poly_id }}";
+    const LATITUDE = "{{ latitude }}";
+    const LONGITUDE = "{{ longitude }}";
+
+    // Weather Data Fetching
+    function fetchWeatherData() {
+      $.ajax({
+        url: 'https://api.agromonitoring.com/agro/1.0/weather',
+        method: 'GET',
+        data: { lat: LATITUDE, lon: LONGITUDE, appid: API_KEY },
+        success: function (weather) {
+          const tempC = (weather.main.temp - 273.15).toFixed(2);
+          $('#temperature').text(tempC + ' °C');
+          $('#humidity').text(weather.main.humidity + '%');
+          $('#weatherCondition').text(weather.weather[0].description);
+          fetchSoilData();
+        },
+        error: function () { alert('Error fetching weather data'); }
+      });
+    }
+
+    function fetchSoilData() {
+      $.ajax({
+        url: 'https://api.agromonitoring.com/agro/1.0/soil',
+        method: 'GET',
+        data: { polyid: POLY_ID, appid: API_KEY },
+        success: function (soil) {
+          const soilMoisture = (soil.moisture * 100).toFixed(2);
+          $('#soilMoisture').text(soilMoisture + '%');
+        },
+        error: function () { alert('Error fetching soil data'); }
+      });
+    }
+
+    // AI Farming Advice
+    $('#farmingAdviceForm').submit(function (event) {
+      event.preventDefault();
+      const crop = $('#crop').val();
+      $.ajax({
+        url: '/get_farming_suggestion',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ prompt: `Provide optimal farming suggestions for crop: ${crop}.` }),
+        success: function (response) {
+          $('#ai-response').html(formatAIResponse(response.suggestion));
+        },
+        error: function () { $('#ai-response').text('Error fetching AI advice.'); }
+      });
+    });
+
+    function formatAIResponse(responseText) {
+      let formattedText = responseText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/- (.*?)/g, '<ul><li>$1</li></ul>');
+      formattedText = formattedText.replace(/\n/g, '<br>');
+      return formattedText;
+    }
+
+    $(document).ready(fetchWeatherData);
+  </script>
+</body>
+
+</html>
