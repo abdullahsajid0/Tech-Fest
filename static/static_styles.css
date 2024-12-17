@@ -1,0 +1,215 @@
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url('tea-estate.jpg');
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bolder;
+  font-size: 1rem; /* Default font size */
+  color: #123C69;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+header {
+  color: white;
+  padding: 8px;
+  text-align: center;
+}
+
+.navbar {
+  margin-top: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  color: #AC3B61;
+  font-weight: bolder;
+  font-size: 1.2rem; /* Slightly larger font size */
+  text-decoration: none;
+}
+
+.nav-links li:hover a {
+  background: rgb(255, 255, 255);
+  color: black;
+  padding: .25rem .5rem;
+  transition: all ease-in 300ms;
+  border-radius: 25px;
+}
+
+.animate-charcter {
+  text-align: right;
+  display: inline-block;
+  font-size: 80px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+  background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 2s linear infinite;
+}
+
+@keyframes textclip {
+  to {
+    background-position: center;
+  }
+}
+
+/* Slider */
+.slider {
+  height: 200px;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 0 30px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
+  padding-top: 10%;
+}
+
+.container .heading {
+  width: 50%;
+  padding-bottom: 50px;
+}
+
+.container .heading h3 {
+  font-size: 3em;
+  font-weight: bolder;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #222;
+}
+
+.container .heading h3 span {
+  font-weight: 50;
+}
+
+.container .box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container .box .dream {
+  display: flex;
+  flex-direction: column;
+  width: 32.5%;
+}
+
+.container .box .dream img {
+  width: 100%;
+  padding-bottom: 15px;
+}
+
+/* Responsive Font Sizes */
+@media (max-width: 1024px) {
+  body {
+    font-size: 0.875rem;
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+  }
+
+  .container .heading h3 {
+    font-size: 2.5rem;
+  }
+
+  .container .box {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container .box .dream {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 0.75rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  .container .heading h3 {
+    font-size: 2rem;
+  }
+
+  .slider {
+    height: 150px;
+  }
+
+  .container .box .dream img {
+    height: auto;
+    width: 90%;
+  }
+
+  .footer {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Adjust the header navigation for smaller screens */
+  .nav-links {
+    flex-direction: column;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 0.65rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+  }
+
+  .container .heading h3 {
+    font-size: 1.8rem;
+  }
+
+  .container .box .dream {
+    width: 100%;
+  }
+
+  .footer {
+    font-size: 0.75rem;
+  }
+
+  /* Additional styling for very small screens */
+  .footer {
+    padding: 10px 0;
+  }
+}

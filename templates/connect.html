@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Connect to MongoDB</title>
+</head>
+<body>
+    <h1>MongoDB Connection</h1>
+    <form method="POST" action="/connect-db">
+        <button type="submit">Connect to Database</button>
+    </form>
+    {% if status %}
+        <p>{{ status }}</p>
+    {% endif %}
+</body>
+</html>
