@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>AgriGo</title>
@@ -57,6 +58,7 @@
           <button type="submit">Get Suggestion</button>
         </form>
         <div id="ai-response">AI Response will appear here...</div>
+        <button id="downloadPdf" style="margin-top: 10px;">Download Response as PDF</button>
       </div>
     </div>
 
@@ -76,6 +78,41 @@
     const LONGITUDE = "{{ longitude }}";
 
     // Weather Data Fetching
+    // Function to download AI response as a PDF
+    document.getElementById('downloadPdf').addEventListener('click', function () {
+      const { jsPDF } = window.jspdf; // Ensure jsPDF is loaded
+      const pdf = new jsPDF();
+    
+      // Add title
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(18);
+      pdf.text('AI Farming Recommendation', 105, 15, { align: 'center' });
+    
+      // Fetch AI response text and format it
+      const responseText = document.getElementById('ai-response').innerText;
+    
+      // Add formatted content
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      const margin = 10;
+      const pageHeight = pdf.internal.pageSize.height - 20;
+    
+      const splitText = pdf.splitTextToSize(responseText, 180);
+      let cursorY = 30;
+    
+      splitText.forEach(line => {
+        if (cursorY + 10 > pageHeight) { 
+          pdf.addPage(); 
+          cursorY = 20; 
+        }
+        pdf.text(line, margin, cursorY);
+        cursorY += 8;
+      });
+    
+      // Save PDF
+      pdf.save('ai_recommendation.pdf');
+    });
+
     function fetchWeatherData() {
       $.ajax({
         url: 'https://api.agromonitoring.com/agro/1.0/weather',
