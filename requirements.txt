@@ -1,0 +1,6 @@
+Flask
+gTTS
+requests
+python-dotenv
+groq
+gunicorn
